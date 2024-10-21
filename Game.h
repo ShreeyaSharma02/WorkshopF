@@ -80,16 +80,15 @@ public:
                 }
             }
 
-            // If all ships are destroyed, end the game and print "Entity Type: 3"
+            // If all ships are destroyed, end the game
             if (allShipsDestroyed) {
                 std::cout << "All ships destroyed. Game over!\n";
-                std::cout << "Entity Type: " << GameEntityType::ShipType << "\n";  // Print Entity Type 3
                 return;  // Exit the game loop
             }
         }
 
         // If max iterations reached, game ends
-        // No need to print "Max iterations reached" as per the required output.
+        // No need to print anything extra here
     }
 };
 
