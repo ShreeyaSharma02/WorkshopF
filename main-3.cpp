@@ -2,7 +2,7 @@
 #include "Game.h"
 
 int main() {
-    // Create a Game 
+    // Create a Game object
     Game game;
 
     // Initialize the game with 3 ships and 2 mines in a 10x10 grid
