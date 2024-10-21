@@ -80,14 +80,13 @@ public:
                 }
             }
 
-            // If all ships are destroyed, end the game
+            // If all ships are destroyed, end the game and print ONLY "All ships destroyed"
             if (allShipsDestroyed) {
                 std::cout << "All ships destroyed. Game over!\n";
                 return;  // Exit the game loop
             }
         }
 
-        // If max iterations reached, game ends
         // No need to print anything extra here
     }
 };
