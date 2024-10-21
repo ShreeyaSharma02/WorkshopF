@@ -33,31 +33,39 @@ public:
     // Game loop
     void gameLoop(int maxIterations, double mineDistanceThreshold) {
         for (int iteration = 0; iteration < maxIterations; iteration++) {
-            std::cout << "Iteration: " << iteration + 1 << "\n";
+            bool explosionOccurred = false;  // Track if an explosion occurred
+            //std::cout << "Iteration: " << iteration + 1 << "\n";
 
-            // Move all ships
+            // Move all Ship objects by (1, 0)
             for (auto entity : entities) {
                 Ship* ship = dynamic_cast<Ship*>(entity);
                 if (ship && ship->getPos() != std::make_tuple(-1, -1)) {
-                    ship->move(1, 0); // Move ship by (1, 0)
+                    ship->move(1, 0);  // Move the ship by (1, 0)
                 }
             }
 
-            // Check if any ship is close to a mine
+            // Check the distance between each ship and each mine
             for (auto entity1 : entities) {
                 Ship* ship = dynamic_cast<Ship*>(entity1);
-                if (ship && ship->getPos() != std::make_tuple(-1, -1)) {
+                if (ship && ship->getPos() != std::make_tuple(-1, -1)) {  // Check only if ship is not destroyed
                     for (auto entity2 : entities) {
                         Mine* mine = dynamic_cast<Mine*>(entity2);
-                        if (mine && mine->getType() == GameEntityType::MineType) {
+                        if (mine && mine->getType() != GameEntityType::NoneType) {  // Check if the mine hasn't exploded
                             double distance = Utils::calculateDistance(ship->getPos(), mine->getPos());
+
+                            // If within threshold, call explode() and apply explosion to the ship
                             if (distance <= mineDistanceThreshold) {
                                 std::cout << "Mine exploded near ship at distance: " << distance << "\n";
-                                mine->explode(); // Explode mine
-                                ship->setPos(-1, -1); // Mark ship as destroyed
+                                mine->explode(); // Mark the mine as exploded
+                                ship->setPos(-1, -1);  // Mark the ship as destroyed
+                                explosionOccurred = true;
+                                break;  // Stop checking further mines once an explosion occurs
                             }
                         }
                     }
+                }
+                if (explosionOccurred) {
+                    break;  // Stop checking further ships once an explosion occurs
                 }
             }
 
@@ -73,9 +81,12 @@ public:
 
             if (allShipsDestroyed) {
                 std::cout << "All ships destroyed. Game over!\n";
-                break;
+                return;  // Exit the game loop early if all ships are destroyed
             }
         }
+
+        // Print "Max iterations reached" only if the loop runs fully
+        //std::cout << "Max iterations reached. Game over!\n";
     }
 };
 
